@@ -1,5 +1,7 @@
 package com.example.kingdomLegends.config;
 
+import com.example.kingdomLegends.dto.request.IntrospectRequest;
+import com.example.kingdomLegends.service.AuthenticationService;
 import com.nimbusds.jose.JOSEException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,8 +36,10 @@ public class CustomJwtDecoder implements JwtDecoder {
 
             if (!response.isValid())
                 throw new JwtException("Token invalid");
-        } catch (JOSEException | ParseException e) {
+        } catch (ParseException e) {
             throw new JwtException(e.getMessage());
+        } catch (JOSEException e) {
+            throw new RuntimeException(e);
         }
 
         if (Objects.isNull(nimbusJwtDecoder)) {
